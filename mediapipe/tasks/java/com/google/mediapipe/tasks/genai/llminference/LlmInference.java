@@ -233,7 +233,7 @@ public class LlmInference implements AutoCloseable {
       public abstract Builder setPreferredBackend(Backend preferredBackend);
 
       /** Optionally sets a custom cache directory. */
-      public abstract Builder setCacheDir(String cacheDir);
+      public abstract Builder setCacheDir(Optional<String> cacheDir);
 
       abstract LlmInferenceOptions autoBuild();
 
@@ -280,7 +280,7 @@ public class LlmInference implements AutoCloseable {
           .setMaxTokens(512)
           .setMaxTopK(40)
           .setSupportedLoraRanks(Collections.emptyList())
-          .setCacheDir(null);
+          .setCacheDir(Optional.empty());
     }
   }
 }

@@ -45,7 +45,7 @@ public class LlmInference implements AutoCloseable {
     LlmModelSettings.Builder modelSettings =
         LlmModelSettings.newBuilder()
             .setModelPath(options.modelPath())
-            .setCacheDir(context.getCacheDir().getAbsolutePath())
+            .setCacheDir(options.cacheDir().orElse(context.getCacheDir().getAbsolutePath()))
             .setNumDecodeStepsPerSync(NUM_DECODE_STEPS_PER_SYNC)
             .setMaxTokens(options.maxTokens())
             .setMaxTopK(options.maxTopK())
@@ -232,6 +232,9 @@ public class LlmInference implements AutoCloseable {
       /** Sets the preferred backend to use for inference. */
       public abstract Builder setPreferredBackend(Backend preferredBackend);
 
+      /** Optionally sets a custom cache directory. */
+      public abstract Builder setCacheDir(String cacheDir);
+
       abstract LlmInferenceOptions autoBuild();
 
       /** Validates and builds the {@link ImageGeneratorOptions} instance. */
@@ -265,6 +268,9 @@ public class LlmInference implements AutoCloseable {
     /** Returns the preferred backend to use for inference. */
     public abstract Optional<Backend> preferredBackend();
 
+    /** Optional custom cache directory. */
+    public abstract Optional<String> cacheDir();
+
     /** Returns a new builder with the same values as this instance. */
     public abstract Builder toBuilder();
 
@@ -273,7 +279,8 @@ public class LlmInference implements AutoCloseable {
       return new AutoValue_LlmInference_LlmInferenceOptions.Builder()
           .setMaxTokens(512)
           .setMaxTopK(40)
-          .setSupportedLoraRanks(Collections.emptyList());
+          .setSupportedLoraRanks(Collections.emptyList())
+          .setCacheDir(null);
     }
   }
 }
